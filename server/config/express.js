@@ -2,6 +2,7 @@ const express = require('express');
 const cors = require('cors');
 const cookieParser = require('cookie-parser');
 const session = require('express-session');
+const MongoStore = require('connect-mongo');
 const secret = require('./secret');
 const app = express();
 const userRouter = require('../src/routes/userRoutes');
@@ -9,21 +10,20 @@ const stationRouter = require('../src/routes/stationRoutes');
 const noticeRouter = require('../src/routes/noticeRoutes');
 const connect = require('../src/schemas/index');
 
-module.exports =  () => {
-
-
+module.exports = () => {
     app.use(express.json());
     app.use(express.urlencoded({ extended: true }));
     app.use(cors());
     app.use(cookieParser());
+
+    connect();
+
     app.use(session({
-        key: secret.sessionKey.key,
-        secret: secret.sessionKey.secret,
+        secret: secret.secret,
         resave: false,
         saveUninitialized: false,
-        cookie:{
-            expires: 60 * 60 * 3
-        }
+        store: MongoStore.create({mongoUrl: secret.db.atlas}),
+        cookie:{ maxAge : (3.6e+6)*24 }
     }));
 
     app.get('/', (req, res) => {
@@ -34,8 +34,6 @@ module.exports =  () => {
     app.use('/', userRouter);
     app.use('/', stationRouter);
     app.use('/', noticeRouter);
-
-    connect();
     
     return app;
 };

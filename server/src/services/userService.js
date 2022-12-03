@@ -55,7 +55,7 @@ exports.signin = async function (email, password){
         if(userInfo){ //이메일에 해당하는 유저가 있음
             const isEqualPw = await bcrypt.compare(password, userInfo.password);
             if(isEqualPw) {
-                let userData = { email, nickname: userInfo.nickname, studentID: userInfo.studentID};
+                let userData = { email, nickname: userInfo.nickname, studentID: userInfo.studentID, level: userInfo.level};
                 return {
                     result :1,
                     userData
