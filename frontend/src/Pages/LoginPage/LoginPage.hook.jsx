@@ -1,5 +1,6 @@
 import axios from "../../Util/axios";
 import { useState } from "react";
+import { setCookie, setUserId } from "../../Util/LocalStorage";
 
 export const useLogin = () => {
   const [state, setState] = useState({
@@ -16,9 +17,12 @@ export const useLogin = () => {
   };
 
   const postLogin = (navigate) => () => {
-    axios.post("/api/signin", state).then((res) => {
-      console.log(res);
-      navigate("/");
+    axios.post("/api/login", state).then((res) => {
+      if (res.data.code === 200) {
+        setCookie(res.data.result);
+        setUserId(state.email);
+        navigate("/");
+      }
     });
   };
 

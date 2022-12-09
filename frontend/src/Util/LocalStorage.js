@@ -15,3 +15,11 @@ export const setUserId = (userId) => {
 export const setId = (id) => {
   localStorage.setItem("id", id);
 };
+
+export const setCookie = (token) => {
+  document.cookie = token;
+};
+
+export const getCookie = () => {
+  return document.cookie;
+};
