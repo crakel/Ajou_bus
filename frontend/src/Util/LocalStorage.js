@@ -16,6 +16,12 @@ export const setId = (id) => {
   localStorage.setItem("id", id);
 };
 
+export const setLevel = (level) => {
+  localStorage.setItem("level", level);
+};
+
+export const getLevel = () => localStorage.getItem("level");
+
 export const setCookie = (token) => {
   document.cookie = token;
 };
