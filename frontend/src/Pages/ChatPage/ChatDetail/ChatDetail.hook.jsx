@@ -10,7 +10,7 @@ export const useJoinChat = ({ handleAddMessage }) => {
 
   const handleExitChat = () => {
     ClientSocket.socket.emit("exit");
-    naivgate("/");
+    naivgate("/chat");
   };
   useEffect(() => {
     const userName = getUserId();

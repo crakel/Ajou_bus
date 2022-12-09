@@ -14,7 +14,7 @@ export const useGetChatList = () => {
 };
 
 function getChatList() {
-  return axios.get("/api/chat").then((res) => res.then);
+  return axios.get("/api/chat").then((res) => res.data);
 }
 
 export const useChatModal = () => {
