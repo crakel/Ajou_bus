@@ -16,11 +16,7 @@ const AdminPrivateRouter = ({ Component }) => {
 export const AdminRouter = () => {
   return (
     <Routes>
-      <Route path="/" element={<AdminLogin />} />
-      <Route
-        path="/main"
-        element={<AdminPrivateRouter Component={AdminMain} />}
-      />
+      <Route path="/" element={<AdminPrivateRouter Component={AdminMain} />} />
       <Route
         path="/create"
         element={<AdminPrivateRouter Component={AdminCreate} />}
