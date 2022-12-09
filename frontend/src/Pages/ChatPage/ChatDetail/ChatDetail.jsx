@@ -20,12 +20,8 @@ export const ChatDetail = () => {
         </div>
         <div id="chat_detail_room_div">
           <div id="chat_detail_room_box">
-            {messageList.map((message) => (
-              <Message
-                id={message.id}
-                name={message.name}
-                message={message.message}
-              />
+            {messageList.map((message, i) => (
+              <Message id={i} name={message.userName} message={message.msg} />
             ))}
             <Message name="익명1" message="hihi" />
             <MessageInput handleSendMessage={handleSendMessage} />

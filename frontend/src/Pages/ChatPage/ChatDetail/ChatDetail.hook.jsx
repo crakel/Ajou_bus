@@ -1,24 +1,28 @@
 import { useState } from "react";
 import { useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { getUserId } from "../../../Util/LocalStorage";
 import ClientSocket from "../../../Util/Socket";
 
 export const useJoinChat = ({ handleAddMessage }) => {
   const naivgate = useNavigate();
+  const { roomId } = useParams();
+
   const handleExitChat = () => {
     ClientSocket.socket.emit("exit");
     naivgate("/");
   };
   useEffect(() => {
-    const myId = getUserId();
-    if (!myId) return;
-    const socket = new ClientSocket(myId);
-    socket.socket.on("onMessage", handleAddMessage);
+    const userName = getUserId();
+    if (!userName) return;
+    const socket = new ClientSocket(userName);
+    socket.socket.emit("join_room", { userName, roomId });
+    socket.socket.on("room_msg", handleAddMessage);
 
     return () => {
       ClientSocket.instance = null;
-      socket.socket.off("onMessage", handleAddMessage);
+      socket.socket.emit("leave_room", { userName, roomId });
+      socket.socket.off("room_msg", handleAddMessage);
       socket.socket.disconnect();
     };
   }, []);
@@ -32,8 +36,8 @@ export const useChatMessage = () => {
   const handleAddMessage = (message) =>
     setMessageList((prev) => [...prev, message]);
 
-  const handleSendMessage = (id, message) => () => {
-    ClientSocket.socket.emit("sendMessage", { id, message });
+  const handleSendMessage = (userName, msg) => () => {
+    ClientSocket.socket.emit("req_room_msg", { userName, msg });
   };
   return { messageList, handleAddMessage, handleSendMessage };
 };
