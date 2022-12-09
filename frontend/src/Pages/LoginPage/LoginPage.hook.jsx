@@ -18,11 +18,11 @@ export const useLogin = () => {
 
   const postLogin = (navigate) => () => {
     axios.post("/api/login", state).then((res) => {
-      if (res.data.code === 200) {
-        setCookie(res.data.result);
-        setUserId(state.email);
-        navigate("/");
-      }
+      if (res.data.code !== 200) return;
+
+      setCookie(res.data.result);
+      setUserId(state.email);
+      navigate("/");
     });
   };
 
